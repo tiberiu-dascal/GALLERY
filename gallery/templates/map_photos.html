@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Map :: PhotoGallery{% endblock %}
+{% block content %}
+    <div id="map" style="height: 80vh; weight: 80vh;"></div>
+    <script>
+window.onload = init;
+
+
+
+var locations = [
+  {% for photo in photos %}
+  ['<h2>{{ photo.title }}</h2><br><a href="{{ photo.image.url }}"><img src="{{ photo.image.url }}" style="width:250px"></a><br><br><a class="btn btn-primary text-white" href="/album/{{ album.id }}/">Go to album</a>', {{ photo.latitude }}, {{ photo.longitude}} ],
+  {% endfor %}
+];
+function init() {
+  const map = L.map('map',{
+      center: [locations[0][1], locations[0][2]],
+      zoom: 13,
+      layers: [
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap'
+        }),
+      ]
+    });
+
+  for (var i = 0; i < locations.length; i++) {
+    marker = new L.marker([locations[i][1], locations[i][2]], {draggable: true})
+      .bindPopup(locations[i][0])
+      .addTo(map);
+  }
+}
+    </script>
+{% endblock %}

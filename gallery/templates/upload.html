@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Upload :: Photo Gallery{% endblock %}
+{% block content %}  
+{% load crispy_forms_tags %}
+
+  <!--Simple Form-->
+  <h2 class="my-4">Add a new photo</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+      {{form.as_p}}
+    <button class="btn btn-dark my-4" type="submit">Submit</button>
+  </form>
+ 
+{% endblock %}

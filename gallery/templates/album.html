@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home :: Photo Gallery{% endblock %}
+{% block content %}
+    <div class="row text-center">
+        <div class="col-lg-12">
+            <a href="{% url 'upload' %}" class="btn btn-primary float-right mt-4">Upload a new photo</a>
+            <a href="/map/{{ album.id }}/"
+               class="btn btn-secondary float-right mt-4">Check it on the map</a>
+        </div>
+    </div>
+    <div class="row">
+        {% for photo in photos %}
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+                <div class="card shadow-sm">
+                    <a data-fancybox="gallery" href="{{ photo.image.url }}">
+                        <img src="{{ photo.image.url }}"
+                             width="305px"
+                             height="150px"
+                             alt="{{ photo.title }}"
+                             style="object-fit:cover;
+                                    padding:3px">
+                    </a>
+                    <div class="card-body">
+                        <p class="card-text">{{ photo.title }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <a href="/{{ photo.id }}/delete/" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
