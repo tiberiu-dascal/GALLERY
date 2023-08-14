@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import DeleteView
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required
 from .models import Photo, User, Album
 from .forms import PhotoForm, AlbumForm
 from .get_coords import get_image_coordinates
@@ -16,18 +15,13 @@ def index(request):
     return render(request, "index.html", context)
 
 
-@login_required
 def album(request, pk):
-    if user.is_authenticated:
-        album = Album.objects.get(id=pk)
-        photos = album.photo_set.all()
-        context = {"photos": photos, "album": album}
-        return render(request, "album.html", context)
-    else:
-        return render(request, "login.html")
+    album = Album.objects.get(id=pk)
+    photos = album.photo_set.all()
+    context = {"photos": photos, "album": album}
+    return render(request, "album.html", context)
 
 
-@login_required
 def create_album(request):
     if request.method == "POST":
         form = AlbumForm(request.POST)
@@ -38,7 +32,6 @@ def create_album(request):
     return render(request, "create_album.html", {"form": form})
 
 
-@login_required
 def upload(request):
     if request.method == "POST":
         form = PhotoForm(request.POST, request.FILES)
@@ -88,7 +81,6 @@ def login(request):
         return render(request, "login.html")
 
 
-@login_required
 def map_photos(request, pk):
     album = Album.objects.get(id=pk)
     photos = album.photo_set.all()

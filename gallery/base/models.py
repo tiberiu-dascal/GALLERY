@@ -26,9 +26,9 @@ class Photo(models.Model):
     title = models.CharField(max_length=70)
     image = models.ImageField()
     date = models.DateField(auto_now_add=True)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    thumbnail = models.ImageField()
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    thumbnail = models.ImageField(blank=True, null=True)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
     def __str__(self):
