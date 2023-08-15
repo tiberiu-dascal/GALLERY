@@ -1,17 +1,18 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import DeleteView
 from django.contrib import auth
+from django.contrib.auth import login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .models import Photo, User, Album
 from .forms import PhotoForm, AlbumForm
 from .get_coords import get_image_coordinates
 
-# from django.contrib import messages # will be used later
-
 
 # Create your views here.
 def index(request):
-    albums = Album.objects.all()
-    context = {"albums": albums}
+    photos = Photo.objects.all()
+    context = {"photos": photos}
     return render(request, "index.html", context)
 
 
@@ -50,33 +51,54 @@ class PhotoDeleteView(DeleteView):
 
 def register(request):
     if request.method == "POST":
-        # check if user exists
-        # if user exists, redirect to login page
-        # if user does not exist, create user and redirect to index page
         name = request.POST["name"]
         email = request.POST["email"]
         password = request.POST["password"]
-        try:
-            user = User.objects.get(name=name, email=email, password=password)
-            return redirect("login")
-        except User.DoesNotExist:
+        password2 = request.POST["password_confirm"]
+
+        if (
+            name == ""
+            or email == ""
+            or password == ""
+            or password2 == ""
+            or password != password2
+        ):
+            messages.warning(request, "Please fill in all the fields")
+            return redirect("register")
+
+        if User.objects.filter(name=name).exists():
+            messages.error(request, "Username is already taken")
+            return redirect("register")
+        else:
             user = User.objects.create(name=name, email=email, password=password)
-            request.session["user_id"] = user.id
-            return redirect("/")
+            user.save()
+            messages.success(request, "You are now registered")
+            return redirect("index")
     return render(request, "register.html")
 
 
-def login(request):
+@login_required
+def custom_logout(request):
+    logout(request)
+    messages.success(request, "You are now logged out")
+    return redirect("index")
+
+
+def login_user(request):
     if request.method == "POST":
-        username = request.POST["username"]
+        user = request.POST["user"]
         password = request.POST["password"]
-        user = auth.authenticate(username=username, password=password)
+        if User.objects.filter(name=user).exists():
+            user = auth.authenticate(user=user, password=password)
+
         if user is not None:
-            auth.login(request, user)
-            print("user logedin")
-            return redirect("home")
+            login(request, user)
+            print("user logged in")
+            messages.success(request, "You are now logged in")
+            return redirect("index")
         else:
-            return render(request, "login.html", {"invalid": "invalid credentials"})
+            messages.error(request, "Invalid credentials")
+            return render(request, "login.html")
     else:
         return render(request, "login.html")
 
