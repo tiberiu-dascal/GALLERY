@@ -16,9 +16,15 @@
               href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
               integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
               crossorigin="" />
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+              integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+              crossorigin="anonymous"
+              referrerpolicy="no-referrer" />
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
                 integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
                 crossorigin=""></script>
+        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     </head>
     <body class="d-flex flex-column h-100">
         <nav class="navbar navbar-expand-lg bg-light">
@@ -33,29 +39,61 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                    <a class="navbar-brand" href="{% url 'index' %}">Photo Gallery</a>
+                    <a class="navbar-brand" href="{% url 'index' %}">Photo <i class="fa-solid fa-image"></i> Gallery</a>
                     {% if user.is_authenticated %}
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'create_album' %}">Create Album</a>
+                                <a class="nav-link" href="{% url 'create_album' %}">
+                                    <i class="fa-solid fa-images"></i> Create Album
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'upload' %}">Upload Photo</a>
+                                <a class="nav-link" href="{% url 'upload' %}">
+                                    <i class="fa-solid fa-upload"></i> Upload Photo
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">About Us</a>
+                                <a class="nav-link" href="#">
+                                    <i class="fa-solid fa-question"></i> About Us
+                                </a>
                             </li>
                         </ul>
-                        <a href={% url 'logout' %}>
-                            <button class="btn btn-outline-success mx-2" type="submit">Log out</button>
-                        </a>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user"> </i>  {{ user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'create_album' %}">
+                                        <i class="fa-regular fa-images"> </i> 
+                                        Create New Album
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'upload' %}">
+                                        <i class="fa-regular fa-image"> </i>
+                                        Upload New Photo
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/map/1/">
+                                        <i class="fa-solid fa-map"></i>
+                                        Photo Map
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><span><i class="fa-solid fa-arrow-right-from-bracket"> </i> Logout</a></li>
+                            </ul>
+                        </div>
                     {% else %}
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">About Us</a>
+                                <a class="nav-link" href="#">
+                                    <i class="fa-solid fa-question"></i> About Us
+                                </a>
                             </li>
                         </ul>
-                        <a href={% url 'login' %}>
+                        <a href="{% url 'login' %}">
                             <button class="btn btn-secondary mx-2" type="submit">Login</button>
                         </a>
                         <a href={% url 'register' %}>

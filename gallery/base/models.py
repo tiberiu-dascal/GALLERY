@@ -1,17 +1,6 @@
 from django.db import models
 
 
-class User(models.Model):
-    name = models.CharField(max_length=70)
-    email = models.EmailField()
-    password = models.CharField(max_length=70)
-    date = models.DateField(auto_now_add=True)
-    albums = models.ManyToManyField("Album", related_name="albums")
-
-    def __str__(self):
-        return self.name
-
-
 class Album(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField()

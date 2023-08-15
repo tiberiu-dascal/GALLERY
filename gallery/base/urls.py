@@ -11,4 +11,7 @@ urlpatterns = [
     path("upload", views.upload, name="upload"),
     path("<pk>/delete/", PhotoDeleteView.as_view()),
     path("map/<pk>/", views.map_photos, name="map"),
+    path("register", views.register, name="register"),
+    path("login", views.login_user, name="login"),
+    path("logout", views.logout_user, name="logout"),
 ]
