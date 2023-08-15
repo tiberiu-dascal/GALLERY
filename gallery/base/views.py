@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import DeleteView
-from django.contrib import auth
-from django.contrib.auth import login, logout
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from .models import Photo, User, Album
+from .models import Photo, Album
 from .forms import PhotoForm, AlbumForm
 from .get_coords import get_image_coordinates
 
@@ -38,6 +35,7 @@ def upload(request):
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, "Photo uploaded successfully")
             return redirect("/")
     form = PhotoForm()
     return render(request, "upload.html", {"form": form})
@@ -47,60 +45,6 @@ class PhotoDeleteView(DeleteView):
     model = Photo
     success_url = "/"
     template_name = "confirm_delete.html"
-
-
-def register(request):
-    if request.method == "POST":
-        name = request.POST["name"]
-        email = request.POST["email"]
-        password = request.POST["password"]
-        password2 = request.POST["password_confirm"]
-
-        if (
-            name == ""
-            or email == ""
-            or password == ""
-            or password2 == ""
-            or password != password2
-        ):
-            messages.warning(request, "Please fill in all the fields")
-            return redirect("register")
-
-        if User.objects.filter(name=name).exists():
-            messages.error(request, "Username is already taken")
-            return redirect("register")
-        else:
-            user = User.objects.create(name=name, email=email, password=password)
-            user.save()
-            messages.success(request, "You are now registered")
-            return redirect("index")
-    return render(request, "register.html")
-
-
-@login_required
-def custom_logout(request):
-    logout(request)
-    messages.success(request, "You are now logged out")
-    return redirect("index")
-
-
-def login_user(request):
-    if request.method == "POST":
-        user = request.POST["user"]
-        password = request.POST["password"]
-        if User.objects.filter(name=user).exists():
-            user = auth.authenticate(user=user, password=password)
-
-        if user is not None:
-            login(request, user)
-            print("user logged in")
-            messages.success(request, "You are now logged in")
-            return redirect("index")
-        else:
-            messages.error(request, "Invalid credentials")
-            return render(request, "login.html")
-    else:
-        return render(request, "login.html")
 
 
 def map_photos(request, pk):
