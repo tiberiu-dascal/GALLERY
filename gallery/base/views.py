@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import DeleteView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 from .models import Photo, Album
 from .forms import PhotoForm, AlbumForm, RegistrationForm
@@ -10,11 +11,17 @@ from .get_coords import get_image_coordinates
 
 # Create your views here.
 def index(request):
-    photos = Photo.objects.all()
-    context = {"photos": photos}
-    return render(request, "index.html", context)
+    if request.user.is_authenticated:
+        user = request.user
+        albums = Album.objects.filter(owner=user.id)
+        photos = Photo.objects.filter(album__in=albums)
+
+        context = {"albums": albums, "photos": photos}
+        return render(request, "index.html", context)
+    return render(request, "index.html")
 
 
+@login_required(login_url="login")
 def album(request, pk):
     album = Album.objects.get(id=pk)
     photos = album.photo_set.all()
@@ -22,6 +29,7 @@ def album(request, pk):
     return render(request, "album.html", context)
 
 
+@login_required(login_url="login")
 def create_album(request):
     if request.method == "POST":
         form = AlbumForm(request.POST)
@@ -32,8 +40,11 @@ def create_album(request):
     return render(request, "create_album.html", {"form": form})
 
 
+@login_required(login_url="login")
 def upload(request):
     # TODO: add latitude and longitude to photo object before saving
+    user = request.user
+    albums = Album.objects.filter(owner=user.id)
     if request.method == "POST":
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
@@ -41,7 +52,8 @@ def upload(request):
             messages.success(request, "Photo uploaded successfully")
             return redirect("/")
     form = PhotoForm()
-    return render(request, "upload.html", {"form": form})
+    context = {"albums": albums, "form": form}
+    return render(request, "upload.html", context)
 
 
 class PhotoDeleteView(DeleteView):
