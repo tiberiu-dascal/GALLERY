@@ -9,6 +9,7 @@ pillow = "*"
 exif = "*"
 geopy = "*"
 django-crispy-forms = "*"
+bpython = "*"
 
 [dev-packages]
 
