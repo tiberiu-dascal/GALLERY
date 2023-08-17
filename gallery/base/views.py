@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+from .utils.thumb_generator import generate_thumbs
 from .models import Photo, Album
 from .forms import PhotoForm, AlbumForm, RegistrationForm
 from .get_coords import get_image_coordinates
@@ -49,8 +50,19 @@ def upload(request):
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+
+            photo = Photo.objects.latest("id")
+            generate_thumbs(photo)
+            photo.thumbnail.name = photo.img.path + "/thumbs/" + photo.img.name
+            photo.latitude = get_image_coordinates(photo.image.path)[0]
+            photo.longitude = get_image_coordinates(photo.image.path)[1]
+            photo.save()
+
             messages.success(request, "Photo uploaded successfully")
             return redirect("/")
+        else:
+            messages.error(request, "Error uploading photo" + str(form._errors))
+            return redirect("upload")
     form = PhotoForm()
     context = {"albums": albums, "form": form}
     return render(request, "upload.html", context)
