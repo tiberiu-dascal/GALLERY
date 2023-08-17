@@ -48,12 +48,13 @@ def upload(request):
     albums = Album.objects.filter(owner=user.id)
     if request.method == "POST":
         form = PhotoForm(request.POST, request.FILES)
+
         if form.is_valid():
             form.save()
 
             photo = Photo.objects.latest("id")
             generate_thumbs(photo)
-            photo.thumbnail.name = photo.img.path + "/thumbs/" + photo.img.name
+            photo.thumbnail.name = "thumbs/" + photo.image.name
             photo.latitude = get_image_coordinates(photo.image.path)[0]
             photo.longitude = get_image_coordinates(photo.image.path)[1]
             photo.save()

@@ -9,7 +9,7 @@ window.onload = init;
 
 var locations = [
   {% for photo in photos %}
-  ['<h2>{{ photo.title }}</h2><br><a href="{{ photo.image.url }}"><img src="{{ photo.image.url }}" style="width:250px"></a><br><br><a class="btn btn-primary text-white" href="/album/{{ album.id }}/">Go to album</a>', {{ photo.latitude }}, {{ photo.longitude}} ],
+  ['<h2>{{ photo.title }}</h2><br><a href="{{ photo.image.url }}"><img src="{{ photo.thumbnail.url }}" style="width:250px"></a><br><br><a class="btn btn-primary text-white" href="/album/{{ album.id }}/">Go to album</a>', {{ photo.latitude }}, {{ photo.longitude}} ],
   {% endfor %}
 ];
 function init() {

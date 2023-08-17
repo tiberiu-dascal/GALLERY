@@ -9,7 +9,7 @@ from .models import Photo, Album
 class PhotoForm(ModelForm):
     class Meta:
         model = Photo
-        fields = ("title", "image")
+        fields = ("title", "image", "album")
 
 
 class AlbumForm(ModelForm):

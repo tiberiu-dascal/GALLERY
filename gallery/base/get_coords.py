@@ -23,6 +23,7 @@ def get_image_coordinates(image_path):
         except AttributeError:
             print("No Coordinates")
     else:
+        coords = (0, 0)
         print("The Image has no EXIF information")
 
     return [coords[0], coords[1]]

@@ -7,11 +7,6 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        Album
-        <select class="form-select">
-            <option selected>Select an album</option>
-            {% for album in albums %}<option value="{{ album.id }}">{{ album.title }}</option>{% endfor %}
-        </select>
         <button class="btn btn-dark my-4" type="submit">Submit</button>
     </form>
 {% endblock %}
