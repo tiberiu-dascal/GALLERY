@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.views.generic.edit import DeleteView
 from django.contrib import messages
@@ -12,14 +13,15 @@ from .get_coords import get_image_coordinates
 
 # Create your views here.
 def index(request):
+    year = datetime.datetime.now().year
     if request.user.is_authenticated:
         user = request.user
         albums = Album.objects.filter(owner=user.id)
         photos = Photo.objects.filter(album__in=albums)
 
-        context = {"albums": albums, "photos": photos}
+        context = {"albums": albums, "photos": photos, "year": year}
         return render(request, "index.html", context)
-    return render(request, "index.html")
+    return render(request, "index.html", {"year": year})
 
 
 @login_required(login_url="login")

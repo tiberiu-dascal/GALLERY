@@ -140,7 +140,12 @@
         <br>
         <footer class="footer fixed-bottom mb-auto py-3 bg-dark text-white">
             <div class="container text-center">
-                <span class="text-white ">All rights reserved to Photo <i class="fa-solid fa-image"></i> Gallery&trade; 2023</span>
+                <span class="text-white ">All rights reserved to Photo <i class="fa-solid fa-image"></i> 
+                {% if year == "2023" %}
+                Gallery&trade; 2023-{{ year }}</span>
+                {% else %}
+                Gallery&trade; 2023</span>
+                {% endif %}
             </div>
         </footer>
     </body>
