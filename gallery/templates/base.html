@@ -42,21 +42,10 @@
                     <a class="navbar-brand" href="{% url 'index' %}">Photo <i class="fa-solid fa-image"></i> Gallery</a>
                     {% if user.is_authenticated %}
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'create_album' %}">
-                                    <i class="fa-solid fa-images"></i> Create Album
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'upload' %}">
-                                    <i class="fa-solid fa-upload"></i> Upload Photo
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="fa-solid fa-question"></i> About Us
-                                </a>
-                            </li>
+                            <form class="d-flex d-inline">
+                                <input class="form-control me-2 w-100" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-primary" type="submit">Search</button>
+                            </form>
                         </ul>
                         <div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,7 +71,20 @@
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}"><span><i class="fa-solid fa-arrow-right-from-bracket"> </i> Logout</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-solid fa-pen"></i>
+                                        Edit Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/map/1/">
+                                        <i class="fa-solid fa-key"></i>
+                                        Reset Password
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><span><i class="fa-solid fa-arrow-right-from-bracket"> </i> Logout</span></a></li>
                             </ul>
                         </div>
                     {% else %}
@@ -136,9 +138,9 @@
             </script>
         </main>
         <br>
-        <footer class="footer mt-auto py-3 bg-body-tertiary">
+        <footer class="footer fixed-bottom mb-auto py-3 bg-dark text-white">
             <div class="container text-center">
-                <span class="text-body-secondary ">All rights reserved to Photo <i class="fa-solid fa-image"></i> Gallery&trade; 2023</span>
+                <span class="text-white ">All rights reserved to Photo <i class="fa-solid fa-image"></i> Gallery&trade; 2023</span>
             </div>
         </footer>
     </body>

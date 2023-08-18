@@ -14,9 +14,8 @@
                 {% endif %}
                 {% if albums|length > 0 and photos|length > 0 %}
                     <a href="{% url 'create_album' %}"
-                       class="btn btn-primary float-right mt-4">Create another album</a>
-                    <a href="{% url 'upload' %}" class="btn btn-primary float-right mt-4">Upload a new photo</a>
-                    <a href="/map/1/" class="btn btn-secondary float-right mt-4">Check it on the map</a>
+                       class="btn btn-primary float-right mt-4">Create another album <i class="fa-solid fa-images"></i></a>
+                    <a href="{% url 'upload' %}" class="btn btn-primary float-right mt-4">Upload a new photo <i class="fa-solid fa-image"></i></a>
                 {% endif %}
             </div>
         </div>
