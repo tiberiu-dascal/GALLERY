@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from .utils.thumb_generator import generate_thumbs
 from .models import Photo, Album
-from .forms import PhotoForm, AlbumForm, RegistrationForm
+from .forms import PhotoForm, AlbumForm, RegistrationForm, EditProfileForm
 from .get_coords import get_image_coordinates
 
 
@@ -128,7 +128,40 @@ def login_user(request):
     return render(request, "login.html")
 
 
+@login_required(login_url="login")
 def logout_user(request):
     logout(request)
     messages.success(request, "Logout successful")
     return redirect("/")
+
+
+@login_required(login_url="login")
+def edit_profile(request):
+    user = request.user
+    if request.method == "POST":
+        username = request.POST.get("username")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        user.username = username
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save(update_fields=["username", "first_name", "last_name"])
+        messages.success(request, "Profile updated successfully")
+        return redirect("/")
+        # else:
+        # messages.error(request, "Error updating profile")
+        # return redirect("profile")
+        # form = EditProfileForm(request.POST, instance=user)
+        # if form.is_valid():
+        #     form.save(update_fields=["first_name", "last_name"])
+        #     messages.success(request, "Profile updated successfully")
+        #     return redirect("/")
+        # else:
+        #     messages.error(request, "Error updating profile" + str(form._errors))
+        #     return redirect("profile")
+    context = {"user": user}
+    return render(request, "edit_profile.html", context)
+
+
+def reset_password(request, user):
+    pass
