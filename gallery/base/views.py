@@ -142,9 +142,11 @@ def edit_profile(request):
         username = request.POST.get("username")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
+
         user.username = username
         user.first_name = first_name
         user.last_name = last_name
+
         user.save(update_fields=["username", "first_name", "last_name"])
         messages.success(request, "Profile updated successfully")
         return redirect("/")

@@ -88,7 +88,7 @@
                             </ul>
                         </div>
                     {% else %}
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#aboutUsModal">
                             <li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <i class="fa-solid fa-question"></i> About Us
@@ -122,6 +122,40 @@
         </div>
         {% endfor %}
         {% endif %}
+        <!-- Modal -->
+        <div class="modal fade" id="aboutUsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">About Us</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h3>What is Photo Gallery?</h3>
+                        <p>Photo Gallery is a web application that allows you to upload your photos and share them with the world.</p>
+                        <h3>Who is it for</h3>
+                        <p>Photo Gallery is for everyone who wants to share their photos with the world.</p>
+                        <h3>How to use it</h3>
+                        <p>Photo Gallery is very easy to use. Just register and start uploading your photos.</p>
+                        <h3>How to contact us</h3>
+                        <p>You can contact us by sending an email to <a href="mailto:example@email.com:"
+                                                                       class="text-decoration-none">Email</a></p>
+                        <h3>How to report a bug</h3>
+                        <p>You can report a bug by sending an email to <a href="mailto:example@email.com:"
+                                                                         class="text-decoration-none">Email</a></p>
+                        <p>Also, you can report a bug by opening an issue on <a href="https://github.com/tibix/GALLERY/issues"
+                                                                                class="text-decoration-none"><i class="fab fa-github"></i> Gallery</a> repository.</p>
+                        <h3>How to contribute</h3>
+                        You can bring your contribution by cloning the repository from <a href="https://github.com/tibix/GALLERY"
+                                                                                          class="text-decoration-none"><i class="fab fa-github"></i> Gallery</a> repository, making a PR with the change you want to see and push the PR to review.
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <main class="flex-shrink-0">
             <br>
             <div class="container">
