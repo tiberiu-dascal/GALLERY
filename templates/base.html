@@ -26,7 +26,7 @@
                 crossorigin=""></script>
         <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     </head>
-    <body class="d-flex flex-column h-100">
+    <body class="d-flex flex-column h-100" onresize="update_dropdown()">
         <nav class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
                 <button class="navbar-toggler"
@@ -51,7 +51,7 @@
                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user"> </i>  {{ user.username }}
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
+                            <ul class="dropdown-menu dropdown-menu-end" id="dropDownMenu">
                                 <li>
                                     <a class="dropdown-item" href="{% url 'create_album' %}">
                                         <i class="fa-regular fa-images"> </i> 
@@ -169,6 +169,20 @@
                     showOnStart: true
                 }
             });    
+            </script>
+            <script>
+                function update_dropdown() {
+                    console.log(window.innerWidth);
+                    if (window.innerWidth > 992) {
+                        //change dropdown-menu-end to dropdown-menu-right for dropdown-menu
+                        document.getElementById("dropDownMenu").classList.add("dropdown-menu-end");
+                        document.getElementById("dropDownMenu").classList.remove("dropdown-menu-right");
+                    } else {
+                        //change dropdown-menu-right to dropdown-menu-end for dropdown-menu
+                        document.getElementById("dropDownMenu").classList.add("dropdown-menu-right");
+                        document.getElementById("dropDownMenu").classList.remove("dropdown-menu-end");
+                    }
+                }
             </script>
         </main>
         <br>

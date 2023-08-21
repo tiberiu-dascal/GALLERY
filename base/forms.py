@@ -1,7 +1,6 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, widgets
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django import forms
 
 from .models import Photo, Album
 
@@ -29,6 +28,28 @@ class RegistrationForm(UserCreationForm):
             "password1",
             "password2",
         )
+        widgets = {
+            "username": widgets.TextInput(
+                attrs={"class": "form-control", "placeholder": "Username"}
+            ),
+            "first_name": widgets.TextInput(
+                attrs={"class": "form-control", "placeholder": "First Name"}
+            ),
+            "last_name": widgets.TextInput(
+                attrs={"class": "form-control", "placeholder": "Last Name"}
+            ),
+            "email": widgets.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Email"}
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+
+        self.fields["password1"].widget.attrs["class"] = "form-control"
+        self.fields["password1"].widget.attrs["placeholder"] = "Password"
+        self.fields["password2"].widget.attrs["class"] = "form-control"
+        self.fields["password2"].widget.attrs["placeholder"] = "Password confirmation"
 
 
 class EditProfileForm(UserCreationForm):
@@ -39,8 +60,3 @@ class EditProfileForm(UserCreationForm):
             "first_name",
             "last_name",
         )
-
-
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=150)
-    password = forms.CharField(widget=forms.PasswordInput)
