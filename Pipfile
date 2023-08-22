@@ -9,6 +9,7 @@ pillow = "*"
 exif = "*"
 geopy = "*"
 bpython = "*"
+django-admin-interface = "*"
 
 [dev-packages]
 

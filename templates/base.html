@@ -95,10 +95,10 @@
                                 </a>
                             </li>
                         </ul>
-                        <a href="{% url 'login' %}">
+                        <a class="text-decoration-none text-white" href="{% url 'login' %}">
                             <button class="btn btn-secondary mx-2" type="submit">Login</button>
                         </a>
-                        <a href={% url 'register' %}>
+                        <a class="text-decoration-none text-white" href={% url 'register' %}>
                             <button class="btn btn-primary mx-2" type="submit">Register</button>
                         </a>
                     {% endif %}
@@ -138,15 +138,15 @@
                         <h3>How to use it</h3>
                         <p>Photo Gallery is very easy to use. Just register and start uploading your photos.</p>
                         <h3>How to contact us</h3>
-                        <p>You can contact us by sending an email to <a href="mailto:example@email.com:"
+                        <p>You can contact us by sending an email to <a class="text-decoration-none text-white" href="mailto:example@email.com:"
                                                                        class="text-decoration-none">Email</a></p>
                         <h3>How to report a bug</h3>
-                        <p>You can report a bug by sending an email to <a href="mailto:example@email.com:"
+                        <p>You can report a bug by sending an email to <a class="text-decoration-none text-white" href="mailto:example@email.com:"
                                                                          class="text-decoration-none">Email</a></p>
-                        <p>Also, you can report a bug by opening an issue on <a href="https://github.com/tibix/GALLERY/issues"
+                        <p>Also, you can report a bug by opening an issue on <a class="text-decoration-none text-white" href="https://github.com/tibix/GALLERY/issues"
                                                                                 class="text-decoration-none"><i class="fab fa-github"></i> Gallery</a> repository.</p>
                         <h3>How to contribute</h3>
-                        You can bring your contribution by cloning the repository from <a href="https://github.com/tibix/GALLERY"
+                        You can bring your contribution by cloning the repository from <a class="text-decoration-none text-white" href="https://github.com/tibix/GALLERY"
                                                                                           class="text-decoration-none"><i class="fab fa-github"></i> Gallery</a> repository, making a PR with the change you want to see and push the PR to review.
 
                     </div>
@@ -186,7 +186,9 @@
             </script>
         </main>
         <br>
-        <footer class="footer fixed-bottom mb-auto py-3 bg-dark text-white">
+        <br>
+        <br>
+        <footer class="footer fixed-bottom mt-5 mb-auto py-1 bg-dark text-white">
             <div class="container text-center">
                 <span class="text-white ">All rights reserved to Photo <i class="fa-solid fa-image"></i> 
                 {% if year == "2023" %}
@@ -194,6 +196,36 @@
                 {% else %}
                 Gallery&trade; 2023</span>
                 {% endif %}
+                <div class="px-5 mt-2">
+                    <ul class="text-white fs-2">
+                        <li class="list-inline-item text-white">
+                            <a class="text-decoration-none text-white" href="https://facebook.com">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="text-decoration-none text-white" href="https://twitter.com">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="text-decoration-none text-white" href="https://instagram.com">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="text-decoration-none text-white" href="https://linkedin.com">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="text-decoration-none text-white" href="https://github.com/tibix/GALLERY">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </div>
         </footer>
     </body>
