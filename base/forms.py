@@ -1,8 +1,7 @@
 from django.forms import ModelForm, widgets
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 
-from .models import Photo, Album
+from .models import Photo, Album, User
 
 
 class PhotoForm(ModelForm):

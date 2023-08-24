@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .utils.thumb_generator import generate_thumbs
-from .models import Photo, Album
+from .models import Photo, Album, User
 from .forms import PhotoForm, AlbumForm, RegistrationForm, EditProfileForm
 from .get_coords import get_image_coordinates
 
@@ -37,7 +37,9 @@ def create_album(request):
     if request.method == "POST":
         form = AlbumForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.owner = request.user
+            obj.save()
             return redirect("/")
     form = AlbumForm()
     return render(request, "create_album.html", {"form": form})
