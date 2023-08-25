@@ -16,4 +16,4 @@ def generate_thumbs(img):
         )
         print("Thumbnail created")
     except IOError as e:
-        print("cannot create thumbnail for", img.image.path, ": ", e)
+        print("Cannot create thumbnail for", img.image.path, ": ", e)

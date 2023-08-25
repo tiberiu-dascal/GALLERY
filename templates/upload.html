@@ -1,12 +1,33 @@
 {% extends "base.html" %}
 {% block title %}Upload :: Photo Gallery{% endblock %}
 {% block content %}
-    {% load crispy_forms_tags %}
     <!--Simple Form-->
     <h2 class="my-4">Add a new photo</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form method='POST' action="" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-dark my-4" type="submit">Submit</button>
+
+        <div class="form-group m-3">
+            <label>Album</label>
+            <select required name="album" class="form-control">
+                <option value="" selected disabled>Select an album</option>
+                {% for album in albums %}
+                    <option value="{{ album.id }}">{{ album }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group m-3">
+            <label>Description</label>
+            <input required name="description" type="text" placeholder="Enter a description"
+                class="form-control">
+        </div>
+
+
+        <div class="form-group m-3">
+            <label>Upload images</label>
+            <input required name="images" type="file" multiple class="form-control-file">
+        </div>
+
+        <button type='submit' class="btn btn-primary m-3">Upload Photo(s)</button>
     </form>
 {% endblock %}

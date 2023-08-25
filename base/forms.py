@@ -1,13 +1,7 @@
 from django.forms import ModelForm, widgets
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Photo, Album, User
-
-
-class PhotoForm(ModelForm):
-    class Meta:
-        model = Photo
-        fields = ("title", "image", "album")
+from .models import Album, User
 
 
 class AlbumForm(ModelForm):

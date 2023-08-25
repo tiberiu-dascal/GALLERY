@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from .utils.thumb_generator import generate_thumbs
 from .models import Photo, Album, User
-from .forms import PhotoForm, AlbumForm, RegistrationForm, EditProfileForm
+from .forms import AlbumForm, RegistrationForm, EditProfileForm
 from .get_coords import get_image_coordinates
 
 
@@ -51,25 +51,28 @@ def upload(request):
     user = request.user
     albums = Album.objects.filter(owner=user.id)
     if request.method == "POST":
-        form = PhotoForm(request.POST, request.FILES)
+        data = request.POST
+        images = request.FILES.getlist("images")
 
-        if form.is_valid():
-            form.save()
+        if images is not None:
+            for image in images:
+                photo = Photo.objects.create(
+                    image=image,
+                    album_id=data["album"],
+                )
+                photo.title = data["description"]
+                photo.save()
 
-            photo = Photo.objects.latest("id")
-            generate_thumbs(photo)
-            photo.thumbnail.name = "thumbs/" + photo.image.name
-            photo.latitude = get_image_coordinates(photo.image.path)[0]
-            photo.longitude = get_image_coordinates(photo.image.path)[1]
-            photo.save()
+                ps_photo = Photo.objects.latest("id")
+                generate_thumbs(ps_photo)
+                ps_photo.thumbnail = "thumbs/" + ps_photo.image.name
+                ps_photo.latitude = get_image_coordinates(ps_photo.image.path)[0]
+                ps_photo.longitude = get_image_coordinates(ps_photo.image.path)[1]
+                ps_photo.save()
 
-            messages.success(request, "Photo uploaded successfully")
+            messages.success(request, "Photos uploaded successfully")
             return redirect("/")
-        else:
-            messages.error(request, "Error uploading photo" + str(form._errors))
-            return redirect("upload")
-    form = PhotoForm()
-    context = {"albums": albums, "form": form}
+    context = {"albums": albums}
     return render(request, "upload.html", context)
 
 
