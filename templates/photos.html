@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home :: Photo Gallery{% endblock %}
+{% block content %}
+    
+    <div class="row">
+        {% for photo in photos %}
+            <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+                <div class="card shadow-sm">
+                    <a data-fancybox="gallery" href="{{ photo.image.url }}">
+                        <img src="{{ photo.thumbnail.url }}"
+                             width="100%"
+                             height="150px"
+                             alt="{{ photo.title }}"
+                             style="object-fit:cover;
+                                    padding:3px">
+                    </a>
+                    <div class="card-body">
+                        <p class="card-text">{{ photo.title }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <a href="/{{ photo.id }}/delete/" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

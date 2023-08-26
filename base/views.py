@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from .utils.thumb_generator import generate_thumbs
 from .models import Photo, Album, User
-from .forms import AlbumForm, RegistrationForm, EditProfileForm
+from .forms import AlbumForm, RegistrationForm
 from .get_coords import get_image_coordinates
 
 
@@ -30,6 +30,20 @@ def album(request, pk):
     photos = album.photo_set.all()
     context = {"photos": photos, "album": album}
     return render(request, "album.html", context)
+
+
+@login_required(login_url="login")
+def albums(request):
+    albums = Album.objects.filter(owner=request.user.id)
+    context = {"albums": albums}
+    return render(request, "albums.html", context)
+
+
+@login_required(login_url="login")
+def photos(request):
+    photos = Photo.objects.filter(album__owner_id=request.user.id)
+    context = {"photos": photos}
+    return render(request, "photos.html", context)
 
 
 @login_required(login_url="login")
