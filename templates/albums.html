@@ -28,7 +28,10 @@
                    role="button"
                    aria-expanded="true"
                    aria-controls="{{ album.id }}">Album: {{ album.title }} ({{ album.photo_set.all|length }})</a>
+                <a class="btn btn-outline-danger"
+                   href="/{{ album.id }}/delete_album/">Delete Album</a>
             </p>
+
             <div class="row collapse" id={{ album.id }}>
                 {% for photo in album.photo_set.all %}
                     <div class="col-lg-3 col-md-6 col-sm-12 mt-4">

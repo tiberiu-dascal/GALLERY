@@ -59,6 +59,12 @@ def create_album(request):
     return render(request, "create_album.html", {"form": form})
 
 
+class AlbumDeleteView(DeleteView):
+    model = Album
+    success_url = "/"
+    template_name = "delete_album.html"
+
+
 @login_required(login_url="login")
 def upload(request):
     # TODO: add latitude and longitude to photo object before saving

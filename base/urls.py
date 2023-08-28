@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from .views import PhotoDeleteView
+from .views import PhotoDeleteView, AlbumDeleteView
 
 
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path("albums", views.albums, name="albums"),
     path("upload", views.upload, name="upload"),
     path("<pk>/delete/", PhotoDeleteView.as_view()),
+    path("<pk>/delete_album/", AlbumDeleteView.as_view()),
     path("map/<pk>/", views.map_photos, name="map"),
     path("photos", views.photos, name="photos"),
     path("register", views.register, name="register"),
