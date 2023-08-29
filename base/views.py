@@ -86,8 +86,9 @@ def upload(request):
                 ps_photo = Photo.objects.latest("id")
                 generate_thumbs(ps_photo)
                 ps_photo.thumbnail = "thumbs/" + ps_photo.image.name
-                ps_photo.latitude = get_image_coordinates(ps_photo.image.path)[0]
-                ps_photo.longitude = get_image_coordinates(ps_photo.image.path)[1]
+
+                # get the rest of the data from image_data.get_image_data function
+                # don't forget to import it
                 ps_photo.save()
 
             messages.success(request, "Photos uploaded successfully")

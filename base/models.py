@@ -24,12 +24,25 @@ class Album(models.Model):
         return self.title
 
 
+# Sample exif data:
+
+
 class Photo(models.Model):
     title = models.CharField(max_length=70)
     image = models.ImageField()
-    date = models.DateField(auto_now_add=True)
+    date_taken = models.DateField(blank=True, null=True)
+    make = models.CharField(max_length=70, blank=True, null=True)
+    model = models.CharField(max_length=70, blank=True, null=True)
+    orientation = models.CharField(max_length=70, blank=True, null=True)
+    x_resolution = models.FloatField(blank=True, null=True)
+    y_resolution = models.FloatField(blank=True, null=True)
+    resolution_unit = models.CharField(max_length=70, blank=True, null=True)
+    date_uploaded = models.DateField(auto_now_add=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+    country = models.CharField(max_length=70, blank=True, null=True)
+    city = models.CharField(max_length=70, blank=True, null=True)
+    street = models.CharField(max_length=70, blank=True, null=True)
     thumbnail = models.ImageField(blank=True, null=True)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
