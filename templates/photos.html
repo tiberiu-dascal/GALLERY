@@ -19,8 +19,7 @@
                         <p class="card-text">{{ photo.title }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a type="button" href="{% url 'album' photo.album_id %}" class="btn btn-sm btn-outline-secondary">View</a>
-
+                                <a type="button" href="{% url 'album' photo.album_id %}" class="btn btn-sm btn-outline-primary">View</a>
                                 <a href="/{{ photo.id }}/delete/" class="btn btn-sm btn-outline-danger">Delete</a>
                             </div>
                         </div>
