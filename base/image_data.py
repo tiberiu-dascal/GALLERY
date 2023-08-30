@@ -2,7 +2,7 @@ from exif import Image
 
 from geopy.geocoders import Nominatim
 
-geolocator = Nominatim(user_agent="geoapiExercise")
+geolocator = Nominatim(user_agent="gallery_app")
 
 
 def decimal_coords(coords, ref):
@@ -18,22 +18,6 @@ def get_image_data(image):
         img = Image(src)
     if img.has_exif:
         try:
-            # Sample data that needs to be returned by the function
-
-            # date_taken = models.DateField(blank=True, null=True)
-            # make = models.CharField(max_length=70, blank=True, null=True)
-            # model = models.CharField(max_length=70, blank=True, null=True)
-            # orientation = models.CharField(max_length=70, blank=True, null=True)
-            # x_resolution = models.FloatField(blank=True, null=True)
-            # y_resolution = models.FloatField(blank=True, null=True)
-            # resolution_unit = models.CharField(max_length=70, blank=True, null=True)
-            # date_uploaded = models.DateField(auto_now_add=True)
-            # latitude = models.FloatField(blank=True, null=True)
-            # longitude = models.FloatField(blank=True, null=True)
-            # country = models.CharField(max_length=70, blank=True, null=True)
-            # city = models.CharField(max_length=70, blank=True, null=True)
-            # street = models.CharField(max_length=70, blank=True, null=True)
-
             date_taken = img.datetime_original
             make = img.make
             model = img.model
@@ -42,11 +26,14 @@ def get_image_data(image):
             y_resolution = img.y_resolution
             resolution_unit = img.resolution_unit
             latitude = decimal_coords(img.gps_latitude, img.gps_latitude_ref)
-            longitude = decimal_coords(img.gps_logitude, img.gps_longitude_ref)
-            country = None
-            city = None
-            street = None
-            location = geolocator.geocode(str(latitude) + "," + str(longitude))
+            longitude = decimal_coords(img.gps_longitude, img.gps_longitude_ref)
+
+            location = geolocator.reverse(str(latitude) + "," + str(longitude))
+            country = location.address.split(", ")[-1:].strip("[]'")
+            zipcode = location.address.split(", ")[-2:-1].strip("[]'")
+            city = location.address.split(", ")[-3:-2].strip("[]'")
+            street = location.address.split(", ")[1:2].strip("[]'")
+            print(country, zipcode, city, street)
 
             return {
                 "date_taken": date_taken,
@@ -59,38 +46,11 @@ def get_image_data(image):
                 "latitude": latitude,
                 "longitude": longitude,
                 "country": country,
+                "zipcode": zipcode,
                 "city": city,
                 "street": street,
             }
         except AttributeError:
-            return {"error": "No exif data found"}
-
-
-def get_image_coordinates(image_path):
-    with open(image_path, "rb") as src:
-        img = Image(src)
-    coords = (0, 0)
-    if img.has_exif:
-        try:
-            img.gps_longitude
-            coords = (
-                decimal_coords(img.gps_latitude, img.gps_latitude_ref),
-                decimal_coords(img.gps_longitude, img.gps_longitude_ref),
-            )
-        except AttributeError:
-            print("No Coordinates")
-
-    return [coords[0], coords[1]]
-
-
-# c = get_image_coordinates(sys.argv[1])
-
-# Initialize Nominatim API
-
-
-# Get location with geocode
-# location = geolocator.geocode(str(c[0]) + "," + str(c[1]))
-#
-# # Display location
-# print("\nLocation of the given Latitude and Longitude:")
-# print(location)
+            return {"error":"Missing attributes"}
+    else:
+        return {"error":"Image has no exif data"}

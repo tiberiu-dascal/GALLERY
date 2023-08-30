@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .utils.thumb_generator import generate_thumbs
 from .models import Photo, Album, User
 from .forms import AlbumForm, RegistrationForm
-from .get_coords import get_image_coordinates
+from .image_data import get_image_data
 
 
 # Create your views here.
@@ -87,9 +87,28 @@ def upload(request):
                 generate_thumbs(ps_photo)
                 ps_photo.thumbnail = "thumbs/" + ps_photo.image.name
 
-                # get the rest of the data from image_data.get_image_data function
-                # don't forget to import it
-                ps_photo.save()
+                
+                ps_photo_data = get_image_data(ps_photo.image.path)
+                print(ps_photo_data)
+                if "error" in ps_photo_data:
+                    #do something here
+                    print("No available data!")
+                else:
+                    #get data and put it in the DB
+                    ph_photo.date_take = ph_photo_data["date_taken"]
+                    ph_photo.make = ph_photo_data["make"]
+                    ph_photo.model = ph_photo_data["model"]
+                    ph_photo.orientation = ph_photo_data["orientation"]
+                    ph_photo.x_resolution = ph_photo_data["x_resolution"]
+                    ph_photo.y_resolution = ph_photo_data["y_resolution"]
+                    ph_photo.resolution_unit = ph_photo_data["resolution_unit"]
+                    ph_photo.latitude = ph_photo_data["latitude"]
+                    ph_photo.longitude = ph_photo_data["longitude"]
+                    ph_photo.country = ph_photo_data["country"]
+                    ph_photo.zipcode = ph_photo_data["zipcode"]
+                    ph_photo.city = ph_photo_data["city"]
+                    ph_photo.street = ph_photo_data["street"]
+                    ps_photo.save()
 
             messages.success(request, "Photos uploaded successfully")
             return redirect("/")

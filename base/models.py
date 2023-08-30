@@ -41,6 +41,7 @@ class Photo(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     country = models.CharField(max_length=70, blank=True, null=True)
+    zipcode = models.CharField(max_length=6, blank=True, null=True)
     city = models.CharField(max_length=70, blank=True, null=True)
     street = models.CharField(max_length=70, blank=True, null=True)
     thumbnail = models.ImageField(blank=True, null=True)
