@@ -1,9 +1,11 @@
 import datetime
+from django.db.models.fields import parse_datetime
 from django.shortcuts import render, redirect
 from django.views.generic.edit import DeleteView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils.dateparse import parse_datetime
 
 from .utils.thumb_generator import generate_thumbs
 from .models import Photo, Album, User
@@ -87,27 +89,30 @@ def upload(request):
                 generate_thumbs(ps_photo)
                 ps_photo.thumbnail = "thumbs/" + ps_photo.image.name
 
-                
                 ps_photo_data = get_image_data(ps_photo.image.path)
                 print(ps_photo_data)
                 if "error" in ps_photo_data:
-                    #do something here
+                    # do something here
                     print("No available data!")
                 else:
-                    #get data and put it in the DB
-                    ph_photo.date_take = ph_photo_data["date_taken"]
-                    ph_photo.make = ph_photo_data["make"]
-                    ph_photo.model = ph_photo_data["model"]
-                    ph_photo.orientation = ph_photo_data["orientation"]
-                    ph_photo.x_resolution = ph_photo_data["x_resolution"]
-                    ph_photo.y_resolution = ph_photo_data["y_resolution"]
-                    ph_photo.resolution_unit = ph_photo_data["resolution_unit"]
-                    ph_photo.latitude = ph_photo_data["latitude"]
-                    ph_photo.longitude = ph_photo_data["longitude"]
-                    ph_photo.country = ph_photo_data["country"]
-                    ph_photo.zipcode = ph_photo_data["zipcode"]
-                    ph_photo.city = ph_photo_data["city"]
-                    ph_photo.street = ph_photo_data["street"]
+                    # get data and put it in the DB
+                    ps_photo.date_taken = datetime.datetime.strptime(
+                        ps_photo_data["date_taken"], "%Y-%m-%d %H:%M:%S"
+                    )
+                    print(ps_photo.date_taken)
+                    ps_photo.make = ps_photo_data["make"]
+                    ps_photo.model = ps_photo_data["model"]
+                    ps_photo.orientation = ps_photo_data["orientation"]
+                    ps_photo.x_resolution = ps_photo_data["x_resolution"]
+                    ps_photo.y_resolution = ps_photo_data["y_resolution"]
+                    ps_photo.resolution_unit = ps_photo_data["resolution_unit"]
+                    ps_photo.latitude = ps_photo_data["latitude"]
+                    ps_photo.longitude = ps_photo_data["longitude"]
+                    ps_photo.country = ps_photo_data["country"]
+                    ps_photo.county = ps_photo_data["county"]
+                    ps_photo.zipcode = ps_photo_data["zipcode"]
+                    ps_photo.city = ps_photo_data["city"]
+                    ps_photo.street = ps_photo_data["street"]
                     ps_photo.save()
 
             messages.success(request, "Photos uploaded successfully")

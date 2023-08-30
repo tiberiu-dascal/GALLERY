@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "eca2c3f84d5099b612dad2e48be0565f18ca8631e5f4558ef84fe39411e3642a"
+            "sha256": "8cd4195ff4557a7543ed45237a9ab9e96c947fed4564ea501a7eab441dc4fdf4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -220,11 +220,11 @@
         },
         "geopy": {
             "hashes": [
-                "sha256:228cd53b6eef699b2289d1172e462a90d5057779a10388a7366291812601187f",
-                "sha256:4a29a16d41d8e56ba8e07310802a1cbdf098eeb6069cc3d6d3068fc770629ffc"
+                "sha256:a59392bf17adb486b25dbdd71fbed27733bdf24a2dac588047a619de56695e36",
+                "sha256:d2639a46d0ce4c091e9688b750ba94348a14b898a1e55c68f4b4a07e7d1afa20"
             ],
             "index": "pypi",
-            "version": "==2.3.0"
+            "version": "==2.4.0"
         },
         "greenlet": {
             "hashes": [
@@ -376,6 +376,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==2.16.1"
+        },
+        "python-dateutil": {
+            "hashes": [
+                "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86",
+                "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"
+            ],
+            "index": "pypi",
+            "version": "==2.8.2"
         },
         "python-slugify": {
             "hashes": [

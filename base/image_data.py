@@ -19,6 +19,9 @@ def get_image_data(image):
     if img.has_exif:
         try:
             date_taken = img.datetime_original
+            date = date_taken.split(" ")[0]
+            time = date_taken.split(" ")[1]
+            date_taken = date.replace(":", "-") + " " + time
             make = img.make
             model = img.model
             orientation = img.orientation
@@ -29,11 +32,13 @@ def get_image_data(image):
             longitude = decimal_coords(img.gps_longitude, img.gps_longitude_ref)
 
             location = geolocator.reverse(str(latitude) + "," + str(longitude))
-            country = location.address.split(", ")[-1:].strip("[]'")
-            zipcode = location.address.split(", ")[-2:-1].strip("[]'")
-            city = location.address.split(", ")[-3:-2].strip("[]'")
-            street = location.address.split(", ")[1:2].strip("[]'")
-            print(country, zipcode, city, street)
+            address = location.raw["address"]
+
+            country = address.get("country", "")
+            county = address.get("county", "")
+            zipcode = address.get("postcode", "")
+            city = address.get("city", "")
+            street = address.get("road", "")
 
             return {
                 "date_taken": date_taken,
@@ -46,11 +51,12 @@ def get_image_data(image):
                 "latitude": latitude,
                 "longitude": longitude,
                 "country": country,
+                "county": county,
                 "zipcode": zipcode,
                 "city": city,
                 "street": street,
             }
         except AttributeError:
-            return {"error":"Missing attributes"}
+            return {"error": "Missing attributes"}
     else:
-        return {"error":"Image has no exif data"}
+        return {"error": "Image has no exif data"}
