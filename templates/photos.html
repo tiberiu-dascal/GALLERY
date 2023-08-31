@@ -2,19 +2,46 @@
 {% load static %}
 {% block title %}Home :: Photo Gallery{% endblock %}
 {% block content %}
-    
-    <div class="row">
-        <form action="" method="POST">
-            <label for="exampleDataList" class="form-label">Location</label>
-            <input class="form-control" list="country" id="exampleDataList" placeholder="Type to search...">
-            <datalist id="country">
-                <option selected disabled>Select a country</option>
-                {% for country in countries %}
-                    <option value="{{ country }}">{{ country }}</option>
+    <form action="" method="POST">
+    {% csrf_token %}
+     <div class="row">
+       
+
+            <div class="col">
+                <input class="form-control" list="country" placeholder="Filter by Country">
+                <datalist id="country">               
+                {% for c in countries %}
+                    <option value="{{ c.country }}">{{ c.country }}</option>
                 {% endfor %}
-            </datalist>
-        </form>
-        {% for photo in photos %}
+                </datalist>
+            </div>
+            <div class="col">
+                <input class="form-control" list="city" placeholder="Filter by City">
+                <datalist id="city">               
+                {% for c in cities %}
+                    <option value="{{ c.city }}">{{ c.city }}</option>
+                {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="col">
+
+                <input class="form-control" list="street" placeholder="Filter by Street">
+                <datalist id="street">               
+                {% for s in streets %}
+                    <option value="{{ s.street }}">{{ s.street }}</option>
+                {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="col">
+                <input type="submit" class="form-control btn btn-outline-primary" value="Filter">
+            </div>
+           </div>
+ </form>
+
+    <div class="row">
+               {% for photo in photos %}
             <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
                 <div class="card shadow-sm">
                     <a data-fancybox="gallery" href="{{ photo.image.url }}">

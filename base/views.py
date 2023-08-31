@@ -13,6 +13,7 @@ from .models import Photo, Album, User
 from .forms import AlbumForm, RegistrationForm
 from .image_data import get_image_data
 
+
 # Create your views here.
 def index(request):
     year = datetime.datetime.now().year
@@ -44,13 +45,22 @@ def albums(request):
 @login_required(login_url="login")
 def photos(request):
     user = request.user
-    countries = Photo.objects.filter(album__owner_id=user.id).values("country").distinct()
+    countries = (
+        Photo.objects.filter(album__owner_id=user.id).values("country").distinct()
+    )
+    streets = Photo.objects.filter(album__owner_id=user.id).values("street").distinct()
+    cities = Photo.objects.filter(album__owner_id=user.id).values("city").distinct()
 
     if request.method == "POST":
         pass
 
     photos = Photo.objects.filter(album__owner_id=user.id)
-    context = {"photos": photos, "countries":countries}
+    context = {
+        "photos": photos,
+        "cities": cities,
+        "countries": countries,
+        "streets": streets,
+    }
     return render(request, "photos.html", context)
 
 
@@ -85,13 +95,14 @@ def edit_album(request, pk):
             album.title = title
             album.description = description
 
-            album.save(update_fields=["title","description"])
+            album.save(update_fields=["title", "description"])
             messages.success(request, "Album was updated successfully!")
             return redirect("/")
     else:
         messages.error(request, "Operation not Allowe!")
-    context = {"album":album}
+    context = {"album": album}
     return render(request, "edit_album.html", context)
+
 
 @login_required(login_url="login")
 def upload(request):
@@ -137,13 +148,13 @@ def upload(request):
                         ps_photo.city = ps_photo_data["city"]
                         ps_photo.street = ps_photo_data["street"]
                         ps_photo.save()
-                except Exception as e: 
+                except Exception as e:
                     messages.error(request, "Image could not be uploaded!")
                     return redirect("/")
-                
+
             messages.success(request, "Photo(s) uploaded successfully!")
             return redirect("/")
-        else:           
+        else:
             messages.error(request, "No images selected!")
             return redirect("/")
     context = {"albums": albums}
