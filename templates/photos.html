@@ -4,6 +4,16 @@
 {% block content %}
     
     <div class="row">
+        <form action="" method="POST">
+            <label for="exampleDataList" class="form-label">Location</label>
+            <input class="form-control" list="country" id="exampleDataList" placeholder="Type to search...">
+            <datalist id="country">
+                <option selected disabled>Select a country</option>
+                {% for country in countries %}
+                    <option value="{{ country }}">{{ country }}</option>
+                {% endfor %}
+            </datalist>
+        </form>
         {% for photo in photos %}
             <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
                 <div class="card shadow-sm">

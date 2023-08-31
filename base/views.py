@@ -43,8 +43,14 @@ def albums(request):
 
 @login_required(login_url="login")
 def photos(request):
-    photos = Photo.objects.filter(album__owner_id=request.user.id)
-    context = {"photos": photos}
+    user = request.user
+    countries = Photo.objects.filter(album__owner_id=user.id).values("country").distinct()
+
+    if request.method == "POST":
+        pass
+
+    photos = Photo.objects.filter(album__owner_id=user.id)
+    context = {"photos": photos, "countries":countries}
     return render(request, "photos.html", context)
 
 
