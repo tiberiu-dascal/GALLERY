@@ -31,6 +31,8 @@
                    role="button"
                    aria-expanded="true"
                    aria-controls="{{ album.id }}">Album: {{ album.title }} ({{ album.photo_set.all|length }})</a>
+                <a class="btn btn-outline-success"
+                   href="/{{ album.id }}/edit_album/">Edit Album</a>
                 <a class="btn btn-outline-danger"
                    href="/{{ album.id }}/delete_album/">Delete Album</a>
             </p>

@@ -2,7 +2,7 @@
 {% block title %}Upload :: Photo Gallery{% endblock %}
 {% block content %}
     <!--Simple Form-->
-    <h2 class="my-4">Add a new photo</h2>
+    <h2 class="my-4">Add new photo(s)</h2>
     <form method='POST' action="" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -24,7 +24,7 @@
 
 
         <div class="form-group m-3">
-            <label>Upload images</label>
+            <label>Upload image(s)</label>
             <input required name="images" type="file" multiple class="form-control-file">
         </div>
 

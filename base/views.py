@@ -1,7 +1,7 @@
 import datetime
 from django.db.models.fields import parse_datetime
 from django.shortcuts import render, redirect
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -66,6 +66,26 @@ class AlbumDeleteView(DeleteView):
     success_url = "/"
     template_name = "delete_album.html"
 
+
+@login_required(login_url="login")
+def edit_album(request, pk):
+    user = request.user
+    album = Album.objects.filter(pk=pk).get()
+    if album.owner_id == user.id:
+        if request.method == "POST":
+            title = request.POST.get("title")
+            description = request.POST.get("description")
+
+            album.title = title
+            album.description = description
+
+            album.save(update_fields=["title","description"])
+            messages.success(request, "Album was updated successfully!")
+            return redirect("/")
+    else:
+        messages.error(request, "Operation not Allowe!")
+    context = {"album":album}
+    return render(request, "edit_album.html", context)
 
 @login_required(login_url="login")
 def upload(request):
