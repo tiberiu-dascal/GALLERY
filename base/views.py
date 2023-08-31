@@ -6,12 +6,12 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_datetime
+from django.core.exceptions import ValidationError
 
 from .utils.thumb_generator import generate_thumbs
 from .models import Photo, Album, User
 from .forms import AlbumForm, RegistrationForm
 from .image_data import get_image_data
-
 
 # Create your views here.
 def index(request):
@@ -69,7 +69,6 @@ class AlbumDeleteView(DeleteView):
 
 @login_required(login_url="login")
 def upload(request):
-    # TODO: add latitude and longitude to photo object before saving
     user = request.user
     albums = Album.objects.filter(owner=user.id)
     if request.method == "POST":
@@ -83,39 +82,43 @@ def upload(request):
                     album_id=data["album"],
                 )
                 photo.title = data["description"]
-                photo.save()
+                try:
+                    photo.save()
+                    ps_photo = Photo.objects.latest("id")
+                    generate_thumbs(ps_photo)
+                    ps_photo.thumbnail = "thumbs/" + ps_photo.image.name
 
-                ps_photo = Photo.objects.latest("id")
-                generate_thumbs(ps_photo)
-                ps_photo.thumbnail = "thumbs/" + ps_photo.image.name
-
-                ps_photo_data = get_image_data(ps_photo.image.path)
-                print(ps_photo_data)
-                if "error" in ps_photo_data:
-                    # do something here
-                    print("No available data!")
-                else:
-                    # get data and put it in the DB
-                    ps_photo.date_taken = datetime.datetime.strptime(
-                        ps_photo_data["date_taken"], "%Y-%m-%d %H:%M:%S"
-                    )
-                    print(ps_photo.date_taken)
-                    ps_photo.make = ps_photo_data["make"]
-                    ps_photo.model = ps_photo_data["model"]
-                    ps_photo.orientation = ps_photo_data["orientation"]
-                    ps_photo.x_resolution = ps_photo_data["x_resolution"]
-                    ps_photo.y_resolution = ps_photo_data["y_resolution"]
-                    ps_photo.resolution_unit = ps_photo_data["resolution_unit"]
-                    ps_photo.latitude = ps_photo_data["latitude"]
-                    ps_photo.longitude = ps_photo_data["longitude"]
-                    ps_photo.country = ps_photo_data["country"]
-                    ps_photo.county = ps_photo_data["county"]
-                    ps_photo.zipcode = ps_photo_data["zipcode"]
-                    ps_photo.city = ps_photo_data["city"]
-                    ps_photo.street = ps_photo_data["street"]
-                    ps_photo.save()
-
-            messages.success(request, "Photos uploaded successfully")
+                    ps_photo_data = get_image_data(ps_photo.image.path)
+                    if "error" in ps_photo_data:
+                        ps_photo.delete()
+                        messages.error(request, "Image was not saved")
+                    else:
+                        # get data and put it in the DB
+                        ps_photo.date_taken = datetime.datetime.strptime(
+                            ps_photo_data["date_taken"], "%Y-%m-%d %H:%M:%S"
+                        )
+                        ps_photo.make = ps_photo_data["make"]
+                        ps_photo.model = ps_photo_data["model"]
+                        ps_photo.orientation = ps_photo_data["orientation"]
+                        ps_photo.x_resolution = ps_photo_data["x_resolution"]
+                        ps_photo.y_resolution = ps_photo_data["y_resolution"]
+                        ps_photo.resolution_unit = ps_photo_data["resolution_unit"]
+                        ps_photo.latitude = ps_photo_data["latitude"]
+                        ps_photo.longitude = ps_photo_data["longitude"]
+                        ps_photo.country = ps_photo_data["country"]
+                        ps_photo.county = ps_photo_data["county"]
+                        ps_photo.zipcode = ps_photo_data["zipcode"]
+                        ps_photo.city = ps_photo_data["city"]
+                        ps_photo.street = ps_photo_data["street"]
+                        ps_photo.save()
+                except Exception as e: 
+                    messages.error(request, "Image could not be uploaded!")
+                    return redirect("/")
+                
+            messages.success(request, "Photo(s) uploaded successfully!")
+            return redirect("/")
+        else:           
+            messages.error(request, "No images selected!")
             return redirect("/")
     context = {"albums": albums}
     return render(request, "upload.html", context)

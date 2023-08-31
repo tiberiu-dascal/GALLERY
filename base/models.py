@@ -3,6 +3,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
+from django.core.validators import FileExtensionValidator
 
 
 class User(AbstractUser):
@@ -29,7 +30,7 @@ class Album(models.Model):
 
 class Photo(models.Model):
     title = models.CharField(max_length=70)
-    image = models.ImageField()
+    image = models.ImageField(validators=[FileExtensionValidator(allowed_extensions=["jpg","jpeg"], message="File extension not allowed")])
     date_taken = models.DateTimeField(blank=True, null=True)
     date_uploaded = models.DateField(auto_now_add=True)
     make = models.CharField(max_length=70, blank=True, null=True)
