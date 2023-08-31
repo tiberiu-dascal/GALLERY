@@ -3,19 +3,22 @@
 {% block title %}Home :: Photo Gallery{% endblock %}
 {% block content %}
     {% if user.is_authenticated %}
+        
         <div class="row text-center">
             <div class="col-lg-12">
                 {% if albums|length < 1 %}
                     <a href="{% url 'create_album' %}"
-                       class="btn btn-primary float-right mt-4">Create an album</a>
-                {% endif %}
-                {% if photos|length < 1 %}
-                    <a href="{% url 'upload' %}" class="btn btn-primary float-right mt-4">Upload a new photo</a>
-                {% endif %}
-                {% if albums|length > 0 and photos|length > 0 %}
+                       class="btn btn-primary float-right mt-4">Create an album <i class="fa-solid fa-images"></i></a>
+                {% elif photos|length < 1 %}
                     <a href="{% url 'create_album' %}"
                        class="btn btn-primary float-right mt-4">Create another album <i class="fa-solid fa-images"></i></a>
-                    <a href="{% url 'upload' %}" class="btn btn-primary float-right mt-4">Upload a new photo <i class="fa-solid fa-image"></i></a>
+
+                    <a href="{% url 'upload' %}" class="btn btn-primary float-right mt-4">Upload photo(s) <i class="fa-solid fa-image"></i></a>
+                {% else %}
+                    <a href="{% url 'create_album' %}"
+                       class="btn btn-primary float-right mt-4">Create another album <i class="fa-solid fa-images"></i></a>
+
+                    <a href="{% url 'upload' %}" class="btn btn-primary float-right mt-4">Upload photo(s) <i class="fa-solid fa-image"></i></a>
                 {% endif %}
             </div>
         </div>

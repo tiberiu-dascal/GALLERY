@@ -12,8 +12,8 @@ class User(AbstractUser):
     bio = models.TextField(blank=True, null=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
-
+    REQUIRED_FIELDS = ['username']
+    
 
 class Album(models.Model):
     title = models.CharField(max_length=70)
