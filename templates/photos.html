@@ -2,64 +2,65 @@
 {% load static %}
 {% block title %}Home :: Photo Gallery{% endblock %}
 {% block content %}
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ filter_data }}
-        <button class="btn btn-outline-info"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#filters"
-                aria-expanded="false"
-                aria-controls="filters">Filter photos ...</button>
-        <hr>
-        <div class="row collapse" id="filters">
-            <div class="col">
-                <input class="form-control"
-                       name="country"
-                       list="country"
-                       autocomplete="off"
-                       placeholder="Filter by Country">
-                <datalist id="country">
-                    {% for c in countries %}<option value="{{ c.country }}">{{ c.country }}</option>{% endfor %}
-                </datalist>
+    <button class="btn btn-outline-info"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#filters"
+            aria-expanded="false"
+            aria-controls="filters">Filter photos ...</button>
+    <hr>
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12 collapse" id="filters">
+            <form action="" method="POST" autocomplete="off">
+                {% csrf_token %}
+                <div class="mt-2">
+                    <input class="form-control"
+                           name="country"
+                           list="country"
+                           autocomplete="off"
+                           placeholder="Filter by Country">
+                    <datalist id="country">
+                        {% for c in countries %}<option value="{{ c.country }}">{{ c.country }}</option>{% endfor %}
+                    </datalist>
+                </div>
+                <div class="mt-2">
+                    <input class="form-control"
+                           name="city"
+                           list="city"
+                           autocomplete="off"
+                           placeholder="Filter by City">
+                    <datalist id="city">
+                        {% for c in cities %}<option value="{{ c.city }}">{{ c.city }}</option>{% endfor %}
+                    </datalist>
+                </div>
+                <div class="mt-2">
+                    <input class="form-control"
+                           name="street"
+                           list="street"
+                           autocomplete="off"
+                           placeholder="Filter by Street">
+                    <datalist id="street">
+                        {% for s in streets %}<option value="{{ s.street }}">{{ s.street }}</option>{% endfor %}
+                    </datalist>
+                </div>
+                <div class="mt-2">
+                    <select class="form-control"
+                            name="album"
+                            list="album"
+                            placeholder="Filter by Album">
+                        <option value="">Filter by Album</option>
+                        {% for k,v in albums.items %}<option value="{{ k }}">{{ v }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="mt-2">
+                    <input type="submit" class="form-control btn btn-info" value="Apply Filters">
+                </div>
+                <div class="mt-2">
+                    <a href="{% url 'photos' %}" class="form-control btn btn-danger">Reset Filters</a>
+                </div>
             </div>
-            <div class="col">
-                <input class="form-control"
-                       name="city"
-                       list="city"
-                       autocomplete="off"
-                       placeholder="Filter by City">
-                <datalist id="city">
-                    {% for c in cities %}<option value="{{ c.city }}">{{ c.city }}</option>{% endfor %}
-                </datalist>
-            </div>
-            <div class="col">
-                <input class="form-control"
-                       name="street"
-                       list="street"
-                       autocomplete="off"
-                       placeholder="Filter by Street">
-                <datalist id="street">
-                    {% for s in streets %}<option value="{{ s.street }}">{{ s.street }}</option>{% endfor %}
-                </datalist>
-            </div>
-            <div class="col">
-                <select class="form-control"
-                        name="album"
-                        list="album"
-                        placeholder="Filter by Album">
-                    <option value="">Filter by Album</option>
-                    {% for k,v in albums.items %}<option value="{{ k }}">{{ v }}</option>{% endfor %}
-                </select>
-            </div>
-            <div class="col">
-                <input type="submit" class="form-control btn btn-info" value="Filter">
-            </div>
-            <div class="col">
-                <button href="{% url 'photos' %}" class="form-control btn btn-danger">Reset Filters</button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
     <div class="row">
         {% for photo in photos %}
             <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
