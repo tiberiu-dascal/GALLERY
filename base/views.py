@@ -1,12 +1,10 @@
 import datetime
-from django.db.models.fields import parse_datetime
+
 from django.shortcuts import render, redirect
-from django.views.generic.edit import DeleteView, UpdateView
+from django.views.generic.edit import DeleteView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.utils.dateparse import parse_datetime
-from django.core.exceptions import ValidationError
 
 from .utils.thumb_generator import generate_thumbs
 from .models import Photo, Album, User
@@ -50,17 +48,48 @@ def photos(request):
     )
     streets = Photo.objects.filter(album__owner_id=user.id).values("street").distinct()
     cities = Photo.objects.filter(album__owner_id=user.id).values("city").distinct()
+    albums = Photo.objects.filter(album__owner_id=user.id).values("album").distinct()
 
-    if request.method == "POST":
-        pass
+    def get_album_title(album):
+        if Album.objects.get(id=album).title == "":
+            return 0
+        else:
+            return Album.objects.get(id=album).title
+
+    def get_titles(albums):
+        titles = {}
+        for album in albums:
+            titles[album["album"]] = get_album_title(album["album"])
+        return titles
 
     photos = Photo.objects.filter(album__owner_id=user.id)
+
     context = {
         "photos": photos,
         "cities": cities,
         "countries": countries,
         "streets": streets,
+        "albums": get_titles(albums),
     }
+
+    if request.method == "POST":
+        data = request.POST
+        if data["country"] != "":
+            photos = photos.filter(country=data["country"])
+        if data["city"] != "":
+            photos = photos.filter(city=data["city"])
+        if data["street"] != "":
+            photos = photos.filter(street=data["street"])
+        if data["album"] != "":
+            photos = photos.filter(album=data["album"])
+
+        context = {
+            "photos": photos,
+            "cities": cities,
+            "countries": countries,
+            "streets": streets,
+            "albums": get_titles(albums),
+        }
     return render(request, "photos.html", context)
 
 
