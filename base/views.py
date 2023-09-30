@@ -1,15 +1,15 @@
 import datetime
 
-from django.shortcuts import render, redirect
-from django.views.generic.edit import DeleteView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from django.views.generic.edit import DeleteView
 
-from .utils.thumb_generator import generate_thumbs
-from .models import Photo, Album, User
 from .forms import AlbumForm, RegistrationForm
 from .image_data import get_image_data
+from .models import Album, Photo
+from .utils.thumb_generator import generate_thumbs
 
 
 # Create your views here.
@@ -156,8 +156,11 @@ def upload(request):
 
                     ps_photo_data = get_image_data(ps_photo.image.path)
                     if "error" in ps_photo_data:
-                        ps_photo.delete()
-                        messages.error(request, "Image was not saved")
+                        ps_photo.save()
+                        messages.warning(
+                            request, "Image saved, but with limited information!"
+                        )
+                        # messages.error(ps_photo_data["error"])
                     else:
                         # get data and put it in the DB
                         ps_photo.date_taken = datetime.datetime.strptime(
@@ -177,7 +180,7 @@ def upload(request):
                         ps_photo.city = ps_photo_data["city"]
                         ps_photo.street = ps_photo_data["street"]
                         ps_photo.save()
-                except Exception as e:
+                except Exception:
                     messages.error(request, "Image could not be uploaded!")
                     return redirect("/")
 
@@ -199,13 +202,6 @@ class PhotoDeleteView(DeleteView):
 def map_photos(request, pk):
     album = Album.objects.get(id=pk)
     photos = album.photo_set.all()
-    for photo in photos:
-        # we need to add the latitude and longitude from the image
-        # and add it to the photo object
-        if photo.latitude is None or photo.longitude is None:
-            photo.latitude = get_image_coordinates(photo.image.path)[0]
-            photo.longitude = get_image_coordinates(photo.image.path)[1]
-
     context = {"photos": photos, "album": album}
     return render(request, "map_photos.html", context)
 
