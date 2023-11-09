@@ -61,7 +61,7 @@
                             <ul class="dropdown-menu dropdown-menu-end" id="dropDownMenu">
                                 <li>
                                     <a class="dropdown-item" href="{% url 'create_album' %}">
-                                        <i class="fa-regular fa-images"> </i> 
+                                        <i class="fa-regular fa-images"> </i>
                                         Create New Album
                                     </a>
                                 </li>
@@ -78,18 +78,18 @@
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
-                                
+
                                 <li>
                                     <a class="dropdown-item" href="{% url 'albums' %}">
                                         <i class="fa-solid fa-images"></i>
-                                        View Album(s) 
+                                        View Album(s)
                                     </a>
                                 </li>
 
                                 <li>
                                     <a class="dropdown-item" href="{% url 'photos' %}">
                                         <i class="fa-solid fa-image"></i>
-                                        View Photos(s) 
+                                        View Photos(s)
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
@@ -190,7 +190,7 @@
                 Thumbs : {
                     showOnStart: true
                 }
-            });    
+            });
             </script>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
             <script>
@@ -223,11 +223,11 @@
         <br>
         <footer class="footer mt-5 mb-auto py-1 bg-dark text-white">
             <div class="container text-center">
-                <span class="text-white ">All rights reserved to Photo <i class="fa-solid fa-image"></i> 
-                {% if year == "2023" %}
-                Gallery&trade; 2023</span>
+                <span class="text-white ">All rights reserved to Photo <i class="fa-solid fa-image"></i> Gallery&trade;
+                {% if year == 2023 %}
+                 2023</span>
                 {% else %}
-                Gallery&trade; 2023-{{ year }}</span>
+                 2023-{{ year }}</span>
                 {% endif %}
                 <div class="px-5 mt-2">
                     <ul class="text-white fs-2">
