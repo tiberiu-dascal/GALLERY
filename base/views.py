@@ -1,8 +1,10 @@
 import datetime
+import os
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from django.views.generic.edit import DeleteView
 
@@ -62,8 +64,23 @@ def photos(request):
             titles[album["album"]] = get_album_title(album["album"])
         return titles
 
-    photos = Photo.objects.filter(album__owner_id=user.id)
+    photos_obj = Photo.objects.filter(album__owner_id=user.id)
 
+    if request.method == "POST":
+        data = request.POST
+        if data["country"] != "":
+            photos_obj = photos_obj.filter(country=data["country"])
+        if data["city"] != "":
+            photos_obj = photos_obj.filter(city=data["city"])
+        if data["street"] != "":
+            photos_obj = photos_obj.filter(street=data["street"])
+        if data["album"] != "":
+            photos_obj = photos_obj.filter(album=data["album"])
+
+    p = Paginator(photos_obj, 12)
+    page = request.GET.get("page")
+    photos = p.get_page(page)
+    print(photos)
     context = {
         "photos": photos,
         "cities": cities,
@@ -72,24 +89,6 @@ def photos(request):
         "albums": get_titles(albums),
     }
 
-    if request.method == "POST":
-        data = request.POST
-        if data["country"] != "":
-            photos = photos.filter(country=data["country"])
-        if data["city"] != "":
-            photos = photos.filter(city=data["city"])
-        if data["street"] != "":
-            photos = photos.filter(street=data["street"])
-        if data["album"] != "":
-            photos = photos.filter(album=data["album"])
-
-        context = {
-            "photos": photos,
-            "cities": cities,
-            "countries": countries,
-            "streets": streets,
-            "albums": get_titles(albums),
-        }
     return render(request, "photos.html", context)
 
 
@@ -153,7 +152,6 @@ def upload(request):
                     ps_photo = Photo.objects.latest("id")
                     generate_thumbs(ps_photo)
                     ps_photo.thumbnail = "thumbs/" + ps_photo.image.name
-
                     ps_photo_data = get_image_data(ps_photo.image.path)
                     if "error" in ps_photo_data:
                         ps_photo.save()
