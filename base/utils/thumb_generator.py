@@ -1,7 +1,6 @@
 import os
 from PIL import Image, ImageOps
 
-
 def generate_thumbs(img):
     try:
         image = Image.open(img.image.path)

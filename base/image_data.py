@@ -16,7 +16,7 @@ def get_image_data(image):
     with open(image, "rb") as src:
         img = Image(src)
     if img.has_exif:
-        exifdata = img.list_all()
+        exifdata = img.get_all()
         # print(exifdata)
         for k, v in exifdata.items():
             print(k, v)
